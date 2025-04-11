@@ -8,7 +8,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
-
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
 public class MainActivity extends AppCompatActivity {
 
     private ListView notesListView;
@@ -21,6 +23,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        Button viewArchivedNotesButton = findViewById(R.id.viewArchivedNotesButton);
+        viewArchivedNotesButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ArchivedNotesActivity.class);
+            startActivity(intent);
+        });
+
+
+
+
 
         notesListView = findViewById(R.id.notesListView);
         addNoteButton = findViewById(R.id.addNoteButton);
@@ -35,11 +48,50 @@ public class MainActivity extends AppCompatActivity {
 
         notesListView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(MainActivity.this, AddEditNoteActivity.class);
-            intent.putExtra("NOTE_ID", notesList.get(position).getTitle());
+            intent.putExtra("NOTE_ID", notesList.get(position).getId());
+            intent.putExtra("NOTE_TITLE", notesList.get(position).getTitle());
             intent.putExtra("NOTE_CONTENT", notesList.get(position).getContent());
             startActivityForResult(intent, 2);
         });
+
+
+//delete
+        registerForContextMenu(notesListView); // إضافة هذا السطر
+//delete
     }
+
+
+
+//delete
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.context_menu, menu); // تحميل القائمة من ملف XML
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = info.position; // الحصول على موقع العنصر المحدد
+        Note selectedNote = notesList.get(position); // الحصول على الملاحظة المحددة
+
+        if (item.getItemId() == R.id.delete_note) { // التحقق مما إذا كان الخيار المختار هو "حذف"
+            // حذف الملاحظة من قاعدة البيانات
+            boolean isDeleted = databaseHelper.deleteNote(selectedNote.getId());
+            if (isDeleted) {
+                loadNotes(); // تحديث القائمة بعد الحذف
+            }
+            return true;
+        }else if (item.getItemId() == R.id.archive_note) {
+            boolean isArchived = databaseHelper.archiveNote(selectedNote.getId(), true);
+            if (isArchived) {
+                loadNotes();
+            }
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+//delete
+
 
     private void loadNotes() {
         notesList = databaseHelper.getAllNotes();
@@ -55,4 +107,5 @@ public class MainActivity extends AppCompatActivity {
             loadNotes();
         }
     }
+
 }

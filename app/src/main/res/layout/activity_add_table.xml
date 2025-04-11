@@ -5,25 +5,21 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <Button
-        android:id="@+id/addNoteButton"
+    <EditText
+        android:id="@+id/rowsEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/teal_700"
-        android:text="Add Note"
-        android:textColor="@android:color/white" />
-    <Button
-        android:id="@+id/viewArchivedNotesButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="View Archived Notes"
-        android:backgroundTint="@color/teal_700"
-        android:textColor="@android:color/white"
-        android:layout_marginTop="16dp" />
+        android:hint="Enter number of rows" />
 
-    <ListView
-        android:id="@+id/notesListView"
+    <EditText
+        android:id="@+id/columnsEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
+        android:hint="Enter number of columns" />
+
+    <Button
+        android:id="@+id/createTableButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Table" />
 </LinearLayout>

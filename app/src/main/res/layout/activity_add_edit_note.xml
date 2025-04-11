@@ -16,13 +16,61 @@
         android:id="@+id/contentEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-    android:hint="Content"
-        android:inputType="textMultiLine" />
+        android:minHeight="55dp"
+        android:hint="Content"
+        android:inputType="textMultiLine"
+        android:padding="16dp"
+        />
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/addTableButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save" />
+        android:text="Add Table" />
+
+
+
+    <!-- TextView لعرض المحتوى المنسق -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/contentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:visibility="gone" /> <!-- مخفي افتراضيًا -->
+    </ScrollView>
+
+    <Button
+        android:id="@+id/previewButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Preview"
+        android:layout_marginTop="8dp" />
+
+
+    <Button
+        android:id="@+id/addListButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add List" />
+
+    <Button
+        android:id="@+id/addAudioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Audio" />
+
+
+    <Button
+        android:id="@+id/addImageButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Image" />
+
+
 </LinearLayout>

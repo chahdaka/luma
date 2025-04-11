@@ -31,6 +31,11 @@ android {
     }
 }
 
+
+
+
+
+
 dependencies {
 
     implementation(libs.appcompat)
@@ -40,4 +45,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+
+    implementation("io.noties.markwon:core:4.6.2") // إضافة مكتبة Markwon الأساسية
+    implementation( "io.noties.markwon:ext-tables:4.6.2") // إضافة دعم الجداول
 }

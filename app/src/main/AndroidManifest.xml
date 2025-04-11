@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Luma"
         tools:targetApi="31">
         <activity
+            android:name=".ArchivedNotesActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddEditNoteActivity"
             android:exported="false" />
         <activity
