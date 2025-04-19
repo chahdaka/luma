@@ -18,6 +18,12 @@
         <activity
             android:name=".AddEditNoteActivity"
             android:exported="false" />
+
+            <activity android:name=".AddTableActivity" />
+
+        <activity android:name=".AddListActivity" />
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -27,6 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <activity android:name=".FullImageActivity" />
+    </application>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>

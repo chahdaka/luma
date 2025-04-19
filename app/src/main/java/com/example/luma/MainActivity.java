@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+//archived notes
         Button viewArchivedNotesButton = findViewById(R.id.viewArchivedNotesButton);
         viewArchivedNotesButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ArchivedNotesActivity.class);

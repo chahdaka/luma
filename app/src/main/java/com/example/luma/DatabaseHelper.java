@@ -11,7 +11,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Notes.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION =4;
     public static final String TABLE_NAME = "notes";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_TITLE = "title";
@@ -27,13 +27,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TITLE + " TEXT, " +
                 COLUMN_CONTENT + " TEXT, "+
-
                 "table_data TEXT, " + // لتخزين بيانات الجدول
                 "list_items TEXT, " + // لتخزين عناصر القائمة
-                "audio_file_path TEXT, " + // لتخزين مسار الملف الصوتي
-                "image_file_path TEXT, " + // لتخزين مسار الصورة
-
-        "is_archived INTEGER DEFAULT 0)";
+                "audio_path TEXT,"+//// إضافة عمود جديد لمسار الصوت
+                "image_path TEXT," +   // عمود للصور
+                "is_archived INTEGER DEFAULT 0)";
         db.execSQL(createTable);
     }
 
@@ -48,6 +46,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, note.getTitle());
         values.put(COLUMN_CONTENT, note.getContent());
+        values.put("audio_path", note.getAudioPath()); // إضافة عمود جديد لمسار الصوت
+        values.put("image_path", note.getImagePath()); // إضافة عمود جديد لمسار الصورة
+
 
         long result = db.insert(TABLE_NAME, null, values);
         return result != -1;
@@ -63,8 +64,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
                 String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE));
                 String content = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTENT));
+                String audioPath = cursor.getString(cursor.getColumnIndexOrThrow("audio_path")); // استرجاع مسار الصوت
+                String imagePath = cursor.getString(cursor.getColumnIndexOrThrow("image_path")); // استرجاع مسار الصورة
                 Note note = new Note(id, title, content);
+                note.setAudioPath(audioPath); // تعيين مسار الصوت
                 notes.add(note);
+
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -80,6 +85,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int result = db.update(TABLE_NAME, values, COLUMN_ID + "=?", new String[]{String.valueOf(note.getId())});
         return result > 0;
     }
+
+    //archive notes
     public boolean archiveNote(int id, boolean isArchived) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -88,6 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int result = db.update(TABLE_NAME, values, COLUMN_ID + "=?", new String[]{String.valueOf(id)});
         return result > 0;
     }
+    //archive notes
     public List<Note> getArchivedNotes() {
         List<Note> archivedNotes = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -98,13 +106,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
                 String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE));
                 String content = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTENT));
-                Note note = new Note(id, title, content);
+                String audioPath = cursor.getString(cursor.getColumnIndexOrThrow("audio_path")); // استرجاع مسار الصوت
+                Note note = new Note(id, title, content,audioPath);
                 archivedNotes.add(note);
             } while (cursor.moveToNext());
         }
         cursor.close();
         return archivedNotes;
     }
+    //delete notes
     public boolean deleteNote(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         int result = db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[]{String.valueOf(id)});

@@ -34,7 +34,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/contentTextView"
@@ -45,25 +45,30 @@
             android:visibility="gone" /> <!-- مخفي افتراضيًا -->
     </ScrollView>
 
+
     <Button
         android:id="@+id/previewButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Preview"
-        android:layout_marginTop="8dp" />
-
+        android:layout_marginTop="8dp"
+        android:text="Preview" />
 
     <Button
         android:id="@+id/addListButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add List" />
+        android:text="Add List"
+        android:layout_marginTop="8dp" />
 
     <Button
         android:id="@+id/addAudioButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Audio" />
+        android:text="Add Audio"
+        android:layout_marginTop="8dp" />
+
+
+
 
 
     <Button
