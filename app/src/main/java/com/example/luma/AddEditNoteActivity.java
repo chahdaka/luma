@@ -15,7 +15,9 @@ import io.noties.markwon.ext.tables.TablePlugin;
 import android.widget.TextView;
 import android.content.Intent;
 import android.widget.Toast; // استيراد الكلاس Toast
-
+import java.util.ArrayList; // استيراد ArrayList
+import android.net.Uri; // استيراد Uri
+import java.util.Calendar;
 import android.net.Uri;
 import android.media.MediaPlayer;
 import android.text.method.LinkMovementMethod;
@@ -39,9 +41,23 @@ import androidx.annotation.NonNull; // استيراد الكلاس NonNull
 import java.io.InputStream; // استيراد الكلاس InputStream
 import java.io.OutputStream; // استيراد الكلاس OutputStream
 import java.io.FileOutputStream; // استيراد الكلاس FileOutputStream
+
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.widget.TimePicker;
+
+
+
 public class AddEditNoteActivity extends AppCompatActivity {
     private EditText titleEditText, contentEditText;
     private Button saveButton;
+    private static final String CHANNEL_ID = "note_alarm_channel";
 
     private Button addTableButton, previewButton;
 
@@ -107,6 +123,13 @@ public class AddEditNoteActivity extends AppCompatActivity {
 
         Button addImageButton = findViewById(R.id.addImageButton);
         addImageButton.setOnClickListener(v -> showImageOptions());
+
+        Button shareButton = findViewById(R.id.shareButton);
+        shareButton.setOnClickListener(v -> shareNote());
+
+        Button setAlarmButton = findViewById(R.id.setAlarmButton);
+        setAlarmButton.setOnClickListener(v -> showTimePicker());
+
 
 //audio+photo
         contentTextView.setOnClickListener(v -> {
@@ -248,6 +271,176 @@ public class AddEditNoteActivity extends AppCompatActivity {
         intent.putExtra("IMAGE_URI", imageUri.toString());
         startActivity(intent);
     }
+//alarme
+// عرض TimePickerDialog لاختيار وقت التنبيه
+private void showTimePicker() {
+    Calendar calendar = Calendar.getInstance();
+    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+    int minute = calendar.get(Calendar.MINUTE);
+
+    TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view, selectedHour, selectedMinute) -> {
+        scheduleAlarm(selectedHour, selectedMinute);
+    }, hour, minute, true);
+    timePickerDialog.show();
+}
+
+    // جدولة التنبيه باستخدام AlarmManager
+    private void scheduleAlarm(int hour, int minute) {
+        Calendar alarmCalendar = Calendar.getInstance();
+        alarmCalendar.set(Calendar.HOUR_OF_DAY, hour);
+        alarmCalendar.set(Calendar.MINUTE, minute);
+        alarmCalendar.set(Calendar.SECOND, 0);
+
+        // التحقق من أن الوقت المحدد ليس في الماضي
+        if (alarmCalendar.before(Calendar.getInstance())) {
+            alarmCalendar.add(Calendar.DAY_OF_MONTH, 1); // إضافة يوم واحد إذا كان الوقت في الماضي
+        }
+
+        // إنشاء Intent للتنبيه
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("NOTE_TITLE", titleEditText.getText().toString());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_IMMUTABLE);
+
+        // استخدام AlarmManager لجدولة التنبيه
+        try {
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), pendingIntent);
+            Toast.makeText(this, "Alarm set successfully!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(this, "Failed to set alarm.", Toast.LENGTH_SHORT).show();
+        }
+        } catch (Exception e) {
+            android.util.Log.e("AlarmManager", "Error setting alarm: " + e.getMessage());
+        }
+
+        // إنشاء قناة إشعارات (مطلوب لنظام Android Oreo وأحدث)
+        createNotificationChannel();
+    }
+
+
+
+
+
+    // إنشاء قناة إشعارات (مطلوب لنظام Android Oreo وأحدث)
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Note Alarm Channel";
+            String description = "Channel for note alarms";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+
+   /* private void scheduleAlarm(int hour, int minute) {
+        Calendar alarmCalendar = Calendar.getInstance();
+        alarmCalendar.set(Calendar.HOUR_OF_DAY, hour);
+        alarmCalendar.set(Calendar.MINUTE, minute);
+        alarmCalendar.set(Calendar.SECOND, 0);
+
+        if (alarmCalendar.before(Calendar.getInstance())) {
+            alarmCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("NOTE_TITLE", "Test Note");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), pendingIntent);
+            Toast.makeText(this, "Alarm set successfully!", Toast.LENGTH_SHORT).show();
+        }
+    }*/
+
+//alarme
+
+
+
+
+
+
+
+
+
+//share note
+
+
+    // دالة لمشاركة الملاحظة
+    private void shareNote() {
+        String title = titleEditText.getText().toString();
+        String content = contentEditText.getText().toString();
+
+        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(content)) {
+            Toast.makeText(this, "Note is empty. Nothing to share.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // إنشاء نص المشاركة
+        String shareText = "Title: " + title + "\n\nContent:\n" + content;
+
+        // إنشاء Intent للمشاركة
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Shared Note");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+
+        // التحقق من وجود صورة أو ملف صوتي
+        Note note = getCurrentNote(); // الحصول على الملاحظة الحالية
+        if (note.getImagePath() != null || note.getAudioPath() != null) {
+            ArrayList<Uri> fileUris = new ArrayList<>();
+
+            // إضافة الصورة إذا كانت موجودة
+            if (note.getImagePath() != null) {
+                Uri imageUri = Uri.parse(note.getImagePath());
+                fileUris.add(imageUri);
+            }
+
+            // إضافة الملف الصوتي إذا كان موجودًا
+            if (note.getAudioPath() != null) {
+                Uri audioUri = Uri.parse(note.getAudioPath());
+                fileUris.add(audioUri);
+            }
+
+            // تحديث نوع النية لدعم الملفات
+            shareIntent.setType("*/*");
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, fileUris);
+        }
+
+        // بدء نشاط المشاركة
+        startActivity(Intent.createChooser(shareIntent, "Share Note"));
+    }
+
+    // دالة للحصول على الملاحظة الحالية
+    private Note getCurrentNote() {
+        int id = getIntent().getIntExtra("NOTE_ID", -1);
+        String title = titleEditText.getText().toString();
+        String content = contentEditText.getText().toString();
+        String imagePath = getIntent().getStringExtra("IMAGE_PATH");
+        String audioPath = getIntent().getStringExtra("AUDIO_PATH");
+
+        return new Note(id, title, content, imagePath, audioPath);
+    }
+    //share note
+
+
+
+
+
 
 
 

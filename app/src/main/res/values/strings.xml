@@ -1,6 +1,21 @@
 <resources>
     <string name="app_name">Luma</string>
-
         <string name="hint_enter_list_items">Enter list items (one per line)</string>
+    <string name="add_note">Add Note</string>
+    <string name="view_archived_notes">View Archived Notes</string>
+        <string name="title_hint">Title</string>
+         <string name="content_hint">Content</string>
+         <string name="add_table">Add Table</string>
+         <string name="preview">Preview</string>
+         <string name="add_list">Add List</string>
+        <string name="add_image">Add Image</string>
+        <string name="add_audio">Add Audio</string>
+        <string name="set_alarm">Set Alarm</string>
+        <string name="view_trash">View Trash</string>
+        <string name="share_note">Share Note</string>
+        <string name="login">Login</string>
+        <string name="register">Register</string>
+        <string name="username">Username</string>
+        <string name="password">Password</string>
+    </resources>
 
-</resources>

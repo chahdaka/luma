@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Application Luma</string>
+    <string name="hint_enter_list_items">Entrez les éléments de la liste (un par ligne)</string>
+    <string name="add_note">Ajouter une note</string>
+    <string name="view_archived_notes">Afficher les notes archivées</string>
+    <string name="title_hint">Titre</string>
+    <string name="content_hint">Contenu</string>
+    <string name="add_table">Ajouter un tableau</string>
+    <string name="preview">Aperçu</string>
+    <string name="add_list">Ajouter une liste</string>
+    <string name="add_image">Ajouter une image</string>
+    <string name="add_audio">Ajouter un fichier audio</string>
+    <string name="set_alarm">Définir une alarme</string>
+    <string name="view_trash">Voir la corbeille</string>
+    <string name="share_note">Partager la note</string>
+    <string name="login">Connexion</string>
+    <string name="register">S\'inscrire</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="password">Mot de passe</string>
+</resources>

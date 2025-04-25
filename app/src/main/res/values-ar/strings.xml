@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">تطبيق لوما</string>
+    <string name="hint_enter_list_items">أدخل عناصر القائمة (عنصر واحد لكل سطر)</string>
+    <string name="add_note">إضافة ملاحظة</string>
+    <string name="view_archived_notes">عرض الملاحظات المؤرشفة</string>
+    <string name="title_hint">العنوان</string>
+    <string name="content_hint">المحتوى</string>
+    <string name="add_table">إضافة جدول</string>
+    <string name="preview">معاينة</string>
+    <string name="add_list">إضافة قائمة</string>
+    <string name="add_image">إضافة صورة</string>
+    <string name="add_audio">إضافة ملف صوتي</string>
+    <string name="set_alarm">ضبط منبه</string>
+    <string name="view_trash">عرض المهملات</string>
+    <string name="share_note">مشاركة الملاحظة</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="register">إنشاء حساب</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="password">كلمة المرور</string>
+</resources>

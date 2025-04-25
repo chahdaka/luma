@@ -4,13 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
-
+    <!-- android:hint="Title"-->
     <EditText
         android:id="@+id/titleEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
-        android:hint="Title" />
+        android:hint="Title"
+         />
 
     <EditText
         android:id="@+id/contentEditText"
@@ -21,14 +22,14 @@
         android:inputType="textMultiLine"
         android:padding="16dp"
         />
+    <!--android:text="Add Table"-->
 
     <Button
         android:id="@+id/addTableButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Table" />
-
-
+        android:text="Add Table"
+        />
 
     <!-- TextView لعرض المحتوى المنسق -->
     <ScrollView
@@ -50,8 +51,10 @@
         android:id="@+id/previewButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Preview"
         android:layout_marginTop="8dp"
-        android:text="Preview" />
+        />
+
 
     <Button
         android:id="@+id/addListButton"
@@ -67,15 +70,24 @@
         android:text="Add Audio"
         android:layout_marginTop="8dp" />
 
-
-
-
-
     <Button
         android:id="@+id/addImageButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Image" />
+
+    <Button
+        android:id="@+id/shareButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Share Note"
+        android:layout_marginTop="8dp" />
+    <Button
+        android:id="@+id/setAlarmButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Alarm"
+        android:layout_marginTop="8dp" />
 
 
 </LinearLayout>

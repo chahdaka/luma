@@ -9,8 +9,10 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 import android.view.ContextMenu;
+import android.widget.Toast;
 import android.view.MenuItem;
 import android.view.View;
+import android.content.SharedPreferences;
 public class MainActivity extends AppCompatActivity {
 
     private ListView notesListView;
@@ -46,6 +48,16 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, 1);
         });
 
+        // ربط الزر بـ XML
+        Button viewTrashButton = findViewById(R.id.viewTrashButton);
+
+        // إضافة مستمع للزر
+        viewTrashButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, TrashActivity.class);
+            startActivity(intent); // فتح صفحة سلة المهملات
+        });
+
+
         notesListView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(MainActivity.this, AddEditNoteActivity.class);
             intent.putExtra("NOTE_ID", notesList.get(position).getId());
@@ -76,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.delete_note) { // التحقق مما إذا كان الخيار المختار هو "حذف"
             // حذف الملاحظة من قاعدة البيانات
-            boolean isDeleted = databaseHelper.deleteNote(selectedNote.getId());
+            boolean isDeleted = databaseHelper.moveNoteToTrash(selectedNote.getId());
             if (isDeleted) {
                 loadNotes(); // تحديث القائمة بعد الحذف
             }
@@ -99,6 +111,22 @@ public class MainActivity extends AppCompatActivity {
                 notesList.stream().map(Note::getTitle).toArray(String[]::new));
         notesListView.setAdapter(adapter);
     }
+//trash
+private void deleteNote(int noteId) {
+    boolean isMovedToTrash = databaseHelper.moveNoteToTrash(noteId);
+    if (isMovedToTrash) {
+        Toast.makeText(this, "Note moved to trash.", Toast.LENGTH_SHORT).show();
+        loadNotes(); // تحديث القائمة
+    }
+}
+//trash
+
+
+
+
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -107,5 +135,31 @@ public class MainActivity extends AppCompatActivity {
             loadNotes();
         }
     }
+//login
+@Override
+protected void onStart() {
+    super.onStart();
+
+    // التحقق مما إذا كان المستخدم قد سجل الدخول
+    if (!isLoggedIn()) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish(); // إغلاق MainActivity
+    }
+}
+
+    private boolean isLoggedIn() {
+        // يمكنك تخزين حالة تسجيل الدخول في SharedPreferences
+        SharedPreferences preferences = getSharedPreferences("user_session", MODE_PRIVATE);
+        return preferences.getBoolean("is_logged_in", false);
+    }
+
+
+
+
+
+
+
+
 
 }

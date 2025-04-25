@@ -31,6 +31,18 @@ public class Note {
         this.audioPath = audioPath; // استخدام المسار الصوتي المُمرر
     }
 
+    public Note(int id, String title, String content, String imagePath, String audioPath) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.imagePath = imagePath;
+        this.audioPath = audioPath;
+    }
+
+
+
+
+
 
 
 
